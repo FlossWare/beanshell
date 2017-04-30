@@ -12,6 +12,7 @@
     <target name="test">
         <antunit:antunit failonerror="true">
             <filelist dir=".">
+                <file name="beanshell-test-StringUtils.xml"/>
             </filelist>
 
             <antunit:plainlistener/>

@@ -1,10 +1,10 @@
-<project name="beanshell-setup" xmlns:ant-unit="antlib:org.apache.ant.antunit" xlmns:ant-conrib="http://ant-contrib.sourceforge.net">
+<project name="beanshell-setup" xmlns:ant-unit="antlib:org.apache.ant.antunit" xmlns:ant-conrib="http://ant-contrib.sourceforge.net">
 
     <!-- =========================================================================================== -->
 
-    <property name="flossware.beanshell.HOME"     file="${ant.file.beanshell-setup}"/>
-    <property name="flossware.beanshell.lib.HOME" file="${flossware.beanshell.HOME}/lib"/>
-    <property name="flossware.beanshell.bsh.HOME" file="${flossware.beanshell.HOME}/bsh"/>
+    <dirname  property="flossware.beanshell.HOME" file="${ant.file.beanshell-setup}"/>
+    <property name="flossware.beanshell.lib.HOME" value="${flossware.beanshell.HOME}/lib"/>
+    <property name="flossware.beanshell.bsh.HOME" value="${flossware.beanshell.HOME}/bsh"/>
 
     <!-- =========================================================================================== -->
 
@@ -12,22 +12,30 @@
     <property name="antunit.jar"       value="${flossware.beanshell.lib.HOME}/ant-antunit-1.3.jar"/>
     <property name="beanscripting.jar" value="${flossware.beanshell.lib.HOME}/bsf-2.4.0.jar"/>
     <property name="beanshell.jar"     value="${flossware.beanshell.lib.HOME}/bsh-2.0b6.jar"/>
+    <property name="junit.jar"         value="${flossware.beanshell.lib.HOME}/junit-4.12.jar"/>
 
     <!-- =========================================================================================== -->
 
     <taskdef resource="net/sf/antcontrib/antlib.xml" uri="http://ant-contrib.sourceforge.net" description="Needed to use ant-contrib." >
         <classpath>
-            <fileset file="${antcontrib.jar}"/>
+            <pathelement location="${antcontrib.jar}"/>
+        </classpath>
+    </taskdef>
+
+    <!-- =========================================================================================== -->
+
+    <taskdef uri="antlib:org.apache.ant.antunit" resource="org/apache/ant/antunit/antlib.xml">
+        <classpath>
+            <pathelement location="${antunit.jar}"/>
         </classpath>
     </taskdef>
 
     <!-- =========================================================================================== -->
 
     <path id="flossware.beanshell.lib.PATH">
-        <filelist dir="${flossware.beanshell.lib.HOME}">
-            <file name="${beanscripting.jar}"/>
-            <file name="${beanshell.jar}"/>
-        </filelist>
+        <pathelement location="${beanscripting.jar}"/>
+        <pathelement location="${beanshell.jar}"/>
+        <pathelement location="${junit.jar}"/>
     </path>
 
     <!-- =========================================================================================== -->
