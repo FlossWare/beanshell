@@ -1,0 +1,23 @@
+<project name="beanshell" xmlns:antunit="antlib:org.apache.ant.antunit">
+
+    <!-- =========================================================================================== -->
+
+    <import file="beanshell-setup.xml"/>
+
+    <!-- =========================================================================================== -->
+
+    <!--
+        Run all our tests...
+    -->
+    <target name="test">
+        <antunit:antunit failonerror="true">
+            <filelist dir=".">
+            </filelist>
+
+            <antunit:plainlistener/>
+        </antunit:antunit>
+    </target>
+
+    <!-- =========================================================================================== -->
+
+</project>
