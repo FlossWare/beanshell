@@ -6,6 +6,30 @@
 
     <!-- =========================================================================================== -->
 
+    <scriptdef name="bean-shell" language="beanshell" description="Computes the XSLT to apply using the sfdcignore file">
+        <classpath refid="flossware.beanshell.lib.PATH"/>
+
+        <![CDATA[
+            import junit.framework.Assert;
+
+            importCommands(".");
+
+            stringUtils = StringUtils();
+
+            Assert.assertTrue("Should be blank", stringUtils.isBlank(null));
+            Assert.assertTrue("Should be blank", stringUtils.isBlank(""));
+            Assert.assertTrue("Should be blank", stringUtils.isBlank("  "));
+            Assert.assertTrue("Should be blank", stringUtils.isBlank("          "));
+
+            print ("Trying...");
+            Assert.assertTrue("Should be blank", stringUtils.isBlank("blah"));
+
+            Assert.assertFalse("Should not be blank", stringUtils.isBlank("hello world"));
+        ]]>
+    </scriptdef>
+
+    <!-- =========================================================================================== -->
+
     <!--
         Run all our tests...
     -->
@@ -17,6 +41,12 @@
 
             <antunit:plainlistener/>
         </antunit:antunit>
+    </target>
+
+    <!-- =========================================================================================== -->
+
+    <target name="tryIt">
+        <bean-shell/>
     </target>
 
     <!-- =========================================================================================== -->
