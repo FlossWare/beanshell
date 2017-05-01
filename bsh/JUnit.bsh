@@ -1,0 +1,49 @@
+/**
+ * JUnit in beanshell...
+ */
+JUnit() {
+    fileUtils = FileUtils();
+
+    File[] findAllTestFiless(File dir) {
+        return fileUtils.findByExtension(dir, "Test.bsh");
+    }
+
+    File[] findAllTestFiles(String dir) {
+        return findAllTestTests(new File(dir));
+    }
+
+    File[] findAllSrcFiles(File dir) {
+        return fileUtils.findByExtension(dir, ".bsh");
+    }
+
+    File[] findAllSrcFiles(String dir) {
+        return findAllSrcFiles(new File(dir));
+    }
+
+    void runTests(File srcDir, File testDir) {
+        File[] srcFiles = findAllSrcFiles(srcDir);
+        File[] testFiles = findAllTestFiles(testDir);
+
+    }
+
+    void runTests(String srcDir, String testDir) {
+        runTest(new File(srcDir), new File(testDir));
+    }
+
+
+
+        /*
+        for (URL str : getClassPath()) {
+            System.out.println("Class path = " + str);
+        }
+
+        stringUtils = StringUtils();
+
+        for (String m : stringUtils.methods) {
+            System.out.println(m);
+        }
+    }
+    */
+
+    return this;
+}

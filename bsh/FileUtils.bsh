@@ -1,5 +1,5 @@
 /**
-    File utility class.
+ *  File utility class.
  */
 FileUtils() {
     /**
@@ -33,7 +33,7 @@ FileUtils() {
      *
      * @return a list of files with the requested extension.
      */
-    List findByExtension(File dir, String extension) {
+    File[] findByExtension(File dir, String extension) {
         objectUtils.ensure(dir, "Directory is null!");
         stringUtils.ensure(extension);
 
@@ -48,7 +48,7 @@ FileUtils() {
      *
      * @return a list of files found in dir.
      */
-    List findByExtension(String dir, String extension) {
+    File[] findByExtension(String dir, String extension) {
         return findByExtension(new File(dir), extension);
     }
 

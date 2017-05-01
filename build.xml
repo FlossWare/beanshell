@@ -12,7 +12,9 @@
         <![CDATA[
             import junit.framework.Assert;
 
-            importCommands(".");
+            importCommands("bsh");
+
+            /**
 
             stringUtils = StringUtils();
 
@@ -21,10 +23,11 @@
             Assert.assertTrue("Should be blank", stringUtils.isBlank("  "));
             Assert.assertTrue("Should be blank", stringUtils.isBlank("          "));
 
-            print ("Trying...");
-            Assert.assertTrue("Should be blank", stringUtils.isBlank("blah"));
-
             Assert.assertFalse("Should not be blank", stringUtils.isBlank("hello world"));
+            **/
+
+            junit = JUnit();
+            junit.findAllTests();
         ]]>
     </scriptdef>
 
