@@ -1,7 +1,7 @@
 /**
- * JUnit in beanshell...
+ * BUnit - JUnit ala beanshell...
  */
-JUnit() {
+BUnit() {
     fileUtils = FileUtils();
 
     File[] findAllTestFiless(File dir) {
