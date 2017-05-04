@@ -13,6 +13,8 @@ FileUtils() {
      * A file name filter that filters by file extension.
      */
     class FileExtensionFilter implements FilenameFilter {
+        String extension;
+
         FileExtensionFilter(String extension) {
             this.extension = stringUtils.ensure(extension, "Extension is blank!");
         }
@@ -20,7 +22,7 @@ FileUtils() {
         /**
          * {@inheritDoc}
          */
-        boolean accept(File dir, String name) {
+        public boolean accept(File dir, String name) {
             return name.endsWith(extension);
         }
     }
@@ -61,7 +63,7 @@ FileUtils() {
      *
      * @throws IllegalArgumentException if file is null or blank.
      */
-    String computeRelativeDirName(final String file) {
+    String computeRelativeDirName(String file) {
         return new File(stringUtils.ensure(file, "File is blank - cannot compute relateive dir name!")).getName();
     }
 
@@ -97,7 +99,7 @@ FileUtils() {
      *
      * @return true if file is directory.
      */
-    boolean isDir(final String file) {
+    boolean isDir(String file) {
         return new File(stringUtils.ensure(file, "File is blank - cannot determine if it's a dir!")).isDirectory();
     }
 
@@ -153,7 +155,7 @@ FileUtils() {
 
         try {
             raf = new RandomeAccessFile(file, "+rw");
-            raf.write(null != str ? str.getBytes() : "".getBytes()));
+            raf.write(null != str ? str.getBytes() : "".getBytes());
         } finally {
             ioUtils.close(raf);
         }

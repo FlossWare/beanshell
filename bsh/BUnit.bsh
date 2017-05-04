@@ -4,33 +4,82 @@
 BUnit() {
     fileUtils = FileUtils();
 
-    File[] findAllTestFiless(File dir) {
+    /**
+     * Return all test files found in dir.
+     *
+     * @param dir is the directory containing test files.
+     */
+    File[] findAllTestFiles(File dir) {
         return fileUtils.findByExtension(dir, "Test.bsh");
     }
 
+    /**
+     * Return all test files found in dir.
+     *
+     * @param dir is the directory containing test files.
+     */
     File[] findAllTestFiles(String dir) {
-        return findAllTestTests(new File(dir));
+        return findAllTestFiles(new File(dir));
     }
 
-    File[] findAllSrcFiles(File dir) {
-        return fileUtils.findByExtension(dir, ".bsh");
-    }
+    /**
+     * Run all tests found in testDir using the source found in srcDir.
+     *
+     * @param srcDir is the directory containing source files.
+     * @param testDir is the directory containing test files.
+     */
+    void runTests(String srcDir, String testDir) {
+        addClassPath(srcDir);
+        addClassPath(testDir);
 
-    File[] findAllSrcFiles(String dir) {
-        return findAllSrcFiles(new File(dir));
-    }
+        print("Getting all test files...");
 
-    void runTests(File srcDir, File testDir) {
-        File[] srcFiles = findAllSrcFiles(srcDir);
         File[] testFiles = findAllTestFiles(testDir);
 
+        for (File tf : testFiles) {
+            print("    " + tf);
+        }
+
+        for (File testFile : testFiles) {
+            print("Attempting to get class:  [" + fileUtils.computeBaseName(testFile) + "]");
+
+            eval("toTest=" + fileUtils.computeBaseName(testFile) + "()");
+
+            print("Iterating over methods...");
+
+            for (String method : toTest.methods) {
+                print("    Examining method [" + method + "]");    
+
+                if (method.startsWith("test")) {
+                    /*
+                    bshMethod = toTest.getMethod(method, new Class[0]);
+                    bshMethod.invoke(new Object[0]);
+                    */
+
+                    print("        Executing...");
+
+                    try {
+                        toTest.invokeMethod(method,  new Class[0]);
+                    } catch(Exception e) {
+                        String str = e.toString();
+                        print("        " + str.split("\\n")[0]);
+                    }
+                }
+            }
+        }
     }
 
+    /**
+     * Run all tests found in testDir using the source found in srcDir.
+     *
+     * @param srcDir is the directory containing source files.
+     * @param testDir is the directory containing test files.
+     */
+     /*
     void runTests(String srcDir, String testDir) {
-        runTest(new File(srcDir), new File(testDir));
+        runTests(new File(srcDir), new File(testDir));
     }
-
-
+    */
 
         /*
         for (URL str : getClassPath()) {

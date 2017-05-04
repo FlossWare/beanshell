@@ -1,0 +1,20 @@
+/**
+ * Test the StringUtils class.
+ */
+StringUtilsTest() {
+    import junit.framework.Assert;
+
+    stringUtils = StringUtils();
+
+    void test_isBlank() {
+        Assert.assertTrue("Should be blank", stringUtils.isBlank(null));
+        Assert.assertTrue("Should be blank", stringUtils.isBlank(""));
+        Assert.assertTrue("Should be blank", stringUtils.isBlank("  "));
+        Assert.assertTrue("Should be blank", stringUtils.isBlank("          "));
+
+        Assert.assertFalse("Should not be blank", stringUtils.isBlank("hello world"));
+        Assert.assertTrue("Should be blank", stringUtils.isBlank("hello world"));
+    }
+
+    return this;
+}

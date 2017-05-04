@@ -13,6 +13,10 @@
             import junit.framework.Assert;
 
             importCommands("bsh");
+            importCommands("test");
+
+            bunit = BUnit();
+            bunit.runTests("/home/sfloess/Development/github/FlossWare/beanshell/bsh", "/home/sfloess/Development/github/FlossWare/beanshell/test");
 
             /**
 
@@ -24,10 +28,10 @@
             Assert.assertTrue("Should be blank", stringUtils.isBlank("          "));
 
             Assert.assertFalse("Should not be blank", stringUtils.isBlank("hello world"));
-            **/
 
             junit = JUnit();
             junit.findAllTests();
+            **/
         ]]>
     </scriptdef>
 

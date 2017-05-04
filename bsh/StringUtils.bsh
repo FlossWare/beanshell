@@ -24,7 +24,7 @@ StringUtils() {
      * @throws IllegalArgumentException if str is blank.
      */
     String ensure(String str, String errorMsg) {
-        if (isBlank(Str)) {
+        if (isBlank(str)) {
             throw new IllegalArgumentException(errorMsg);
         }
 
