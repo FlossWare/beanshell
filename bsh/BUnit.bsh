@@ -60,6 +60,17 @@ BUnit() {
 
                     print("        Executing...");
 
+                    bshMethod = toTest.namespace.getMethod(method, new Class[0]);
+                    print(bshMethod.getThrowsType());
+
+                    print(toTest.namespace); //.getMethod(method);
+
+                    /**
+                    for (String sm : bshm.namespace.getMethods()) {
+                        print ("       [" + sm + "]");
+                    }
+                    */
+
                     try {
                         toTest.invokeMethod(method,  new Class[0]);
                     } catch(Exception e) {

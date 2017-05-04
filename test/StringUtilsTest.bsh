@@ -6,7 +6,7 @@ StringUtilsTest() {
 
     stringUtils = StringUtils();
 
-    void test_isBlank() {
+    void test_isBlank() throws Exception {
         Assert.assertTrue("Should be blank", stringUtils.isBlank(null));
         Assert.assertTrue("Should be blank", stringUtils.isBlank(""));
         Assert.assertTrue("Should be blank", stringUtils.isBlank("  "));
