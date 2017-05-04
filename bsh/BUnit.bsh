@@ -32,6 +32,8 @@ BUnit() {
         addClassPath(srcDir);
         addClassPath(testDir);
 
+        importCommands(".");
+
         print("Getting all test files...");
 
         File[] testFiles = findAllTestFiles(testDir);
