@@ -23,6 +23,139 @@ BUnit() {
     }
 
     /**
+     * Return true if methodName starts with test.
+     *
+     * @return true if methodName starts with test.
+     */
+    boolean isTestMethod(String methodName) {
+        return methodName.startsWith("test");
+    }
+
+    /**
+     * Compute the failure message.
+     *
+     * @param targetError the error raised when a method was called.
+     *
+     * @return the compute message.
+     */
+    String computeFailureMessage(bsh.TargetError targetError) {
+        return targetError.toString().split("\\n")[0];
+    }
+    
+    /**
+     * Return true if there are parameters.
+     *
+     * @param bshMethod contains the parameters.
+     *
+     * @return true if there are parameters for this method.
+     */
+    boolean isParameters(bsh.BshMethod bshMethod) {
+        return bshMethod.getParameterTypes().length > 0;
+    }
+
+    /**
+     * Process the failures raised in targetError.
+     *
+     * @param bshMethod the method that was tested when a failure arose.
+     * @param targetError the error that arose.
+     */
+    void processFailures(bsh.BshMethod bshMethod, bsh.TargetError targetError) {
+        for(Class klass : bshMethod.getParameterTypes()) {
+            if (klass.isAssignableFrom(targetError.getTarget().getClass())) {
+                print("        Passed");
+                
+                return;
+            }
+        }
+
+        print("        Failed:  Unexpected exception raised - [" + targetError.getTarget().getClass().getName() + "] - " + computeFailureMessage(targetError));
+    }
+
+    /**
+     * When testing a method and a failure arise, process it here...
+     *
+     * @param toTest the object being tested.
+     * @param bshMethod the test method.
+     * @param targetError the error raised when the method was called.
+     */
+    void processFailure(toTest, bsh.BshMethod bshMethod, bsh.TargetError targetError) {
+        if (!isParameters(bshMethod)) {
+            print("        Failed:  " + computeFailureMessage(targetError));
+
+            return;
+        }
+
+        processFailures(bshMethod, targetError);
+    }
+
+    /**
+     * Test a method on an object.
+     *
+     * @param toTest is the object to test.
+     * @param bshMethod is the beanshell method to test.
+     */
+    void testMethod(toTest, bsh.BshMethod bshMethod) {
+        try {
+            toTest.invokeMethod(bshMethod.getName(), new Object[bshMethod.getParameterTypes().length]);
+            print("        Passed");
+        } catch(bsh.TargetError targetError) {
+            processFailure(toTest, bshMethod, targetError);
+        }
+    }
+
+    /**
+     * Test an inidividual method on an object.
+     *
+     * @param toTest the object to test.
+     * @param methodName is the name of the method to test.
+     */
+    void testMethod(toTest, String methodName) {
+        print("    Testing method [" + methodName + "]");    
+
+        if (!isTestMethod(methodName)) {
+            return;
+        }
+        
+        testMethod(toTest, toTest.namespace.methods.get(methodName));
+    }
+
+    /**
+     * Test an object.
+     *
+     * @param toTest the object to test.
+     * @param methods are the methods on the object to test.
+     */
+    void testObject(toTest, Set methods) {
+        for (String method : toTest.namespace.methods.keySet()) {
+            testMethod(toTest, method);
+        }
+    }
+
+    /**
+     * Test a test file.
+     *
+     * @param testFile is the file to test.
+     */
+    void runTest(File testFile) {
+        importCommands(".");
+
+        eval("toTest=" + fileUtils.computeBaseName(testFile) + "()");
+
+        testObject(toTest, toTest.namespace.methods.keySet());
+    }
+
+    /**
+     * Run tests found in testFiles.
+     *
+     * @param testFiles an array of files to test.
+     */
+    void runTests(File[] testFiles) {
+        for (File testFile : testFiles) {
+            runTest(testFile);
+        }
+    }
+
+    /**
      * Run all tests found in testDir using the source found in srcDir.
      *
      * @param srcDir is the directory containing source files.
@@ -32,59 +165,7 @@ BUnit() {
         addClassPath(srcDir);
         addClassPath(testDir);
 
-        importCommands(".");
-
-        print("Getting all test files...");
-
-        File[] testFiles = findAllTestFiles(testDir);
-
-        for (File tf : testFiles) {
-            print("    " + tf);
-        }
-
-        for (File testFile : testFiles) {
-            print("Attempting to get class:  [" + fileUtils.computeBaseName(testFile) + "]");
-
-            eval("toTest=" + fileUtils.computeBaseName(testFile) + "()");
-
-            print("Iterating over methods...");
-
-            for (String method : toTest.namespace.methods.keySet()) {
-                print("    Testing method [" + method + "]");    
-
-                if (method.startsWith("test")) {
-
-                    bsh.BshMethod bshMethod = toTest.namespace.methods.get(method);
-
-                    try {
-                        toTest.invokeMethod(method, new Object[bshMethod.getParameterTypes().length]);
-                        print("        Passed");
-                    } catch(bsh.TargetError bte) {
-                        Throwable e = bte.getTarget();
-
-                        if (bshMethod.getParameterTypes().length < 1) {
-                            String str = bte.toString();
-                            print("        Failed:  " + str.split("\\n")[0]);
-                        } else {
-                            boolean isExpected = false;
-
-                            for(Class klass : bshMethod.getParameterTypes()) {
-                                if (klass.isAssignableFrom(e.getClass())) {
-                                    isExpected = true;
-                                }
-                            }
-
-                            if (isExpected) {
-                                print("        Passed");
-                            } else {
-                                String str = bte.toString();
-                                print("        Failed:  Unexpected exception raised - [" + e.getClass().getName() + "] - " + str.split("\\n")[0]);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        runTests(findAllTestFiles(testDir));
     }
 
     /**
