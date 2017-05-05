@@ -49,33 +49,38 @@ BUnit() {
 
             print("Iterating over methods...");
 
-            for (String method : toTest.methods) {
-                print("    Examining method [" + method + "]");    
+            for (String method : toTest.namespace.methods.keySet()) {
+                print("    Testing method [" + method + "]");    
 
                 if (method.startsWith("test")) {
-                    /*
-                    bshMethod = toTest.getMethod(method, new Class[0]);
-                    bshMethod.invoke(new Object[0]);
-                    */
 
-                    print("        Executing...");
-
-                    bshMethod = toTest.namespace.getMethod(method, new Class[0]);
-                    print(bshMethod.getThrowsType());
-
-                    print(toTest.namespace); //.getMethod(method);
-
-                    /**
-                    for (String sm : bshm.namespace.getMethods()) {
-                        print ("       [" + sm + "]");
-                    }
-                    */
+                    bsh.BshMethod bshMethod = toTest.namespace.methods.get(method);
 
                     try {
-                        toTest.invokeMethod(method,  new Class[0]);
-                    } catch(Exception e) {
-                        String str = e.toString();
-                        print("        " + str.split("\\n")[0]);
+                        toTest.invokeMethod(method, new Object[bshMethod.getParameterTypes().length]);
+                        print("        Passed");
+                    } catch(bsh.TargetError bte) {
+                        Throwable e = bte.getTarget();
+
+                        if (bshMethod.getParameterTypes().length < 1) {
+                            String str = bte.toString();
+                            print("        Failed:  " + str.split("\\n")[0]);
+                        } else {
+                            boolean isExpected = false;
+
+                            for(Class klass : bshMethod.getParameterTypes()) {
+                                if (klass.isAssignableFrom(e.getClass())) {
+                                    isExpected = true;
+                                }
+                            }
+
+                            if (isExpected) {
+                                print("        Passed");
+                            } else {
+                                String str = bte.toString();
+                                print("        Failed:  Unexpected exception raised - [" + e.getClass().getName() + "] - " + str.split("\\n")[0]);
+                            }
+                        }
                     }
                 }
             }

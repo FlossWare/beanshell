@@ -43,6 +43,6 @@ StringUtils() {
     String ensure(String str) {
         return ensure(str, "String is blank!");
     }
-
+    
     return this;
 }
