@@ -15,12 +15,28 @@ StringUtilsTest() {
         Assert.assertFalse("Should not be blank", stringUtils.isBlank("hello world"));
     }
 
-    void test_another1(RuntimeException re) {
-        throw new IllegalArgumentException("Expected");
+    void test_ensure_String_String_null(IllegalArgumentException e) {
+        stringUtils.ensure(null, "Foo");
     }
 
-    void test_another2(RuntimeException re) {
-        throw new IllegalArgumentException("Not Expected");
+    void test_ensure_String_String_blank(IllegalArgumentException e) {
+        stringUtils.ensure("    ", "Foo");
+    }
+
+    void test_ensure_String_String_empty(IllegalArgumentException e) {
+        stringUtils.ensure("", "Foo");
+    }
+
+    void test_ensure_String_null(IllegalArgumentException e) {
+        stringUtils.ensure(null);
+    }
+
+    void test_ensure_String_blank(IllegalArgumentException e) {
+        stringUtils.ensure("    ");
+    }
+
+    void test_ensure_String_empty(IllegalArgumentException e) {
+        stringUtils.ensure("");
     }
 
     return this;
