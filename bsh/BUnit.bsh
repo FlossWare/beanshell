@@ -119,7 +119,7 @@ BUnit() {
         try {
             toTest.invokeMethod(bshMethod.getName(), new Object[bshMethod.getParameterTypes().length]);
         } catch(bsh.TargetError targetError) {
-            print("    WARNING:  Trouble executing housekeep method [" + bshMethod.getName() + "] - " + computeFailureMessage(targetError));
+            print("    WARNING:  Trouble executing housekeeping method [" + bshMethod.getName() + "] - " + computeFailureMessage(targetError));
         }
     }
 

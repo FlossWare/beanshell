@@ -6,22 +6,6 @@ StringUtilsTest() {
 
     stringUtils = StringUtils();
 
-    void before() {
-        print("*** IN BEFORE ***");
-    }
-
-    void after() {
-        print("*** IN AFTER ***");
-    }
-
-    void beforeClass() {
-        print("*** IN BEFORE CLASS ***");
-    }
-
-    void afterClass() {
-        print("*** IN AFTER CLASS ***");
-    }
-
     void test_isBlank() {
         Assert.assertTrue("Should be blank", stringUtils.isBlank(null));
         Assert.assertTrue("Should be blank", stringUtils.isBlank(""));
@@ -29,14 +13,13 @@ StringUtilsTest() {
         Assert.assertTrue("Should be blank", stringUtils.isBlank("          "));
 
         Assert.assertFalse("Should not be blank", stringUtils.isBlank("hello world"));
-        Assert.assertTrue("Should be blank", stringUtils.isBlank("hello world"));
     }
 
     void test_another1(RuntimeException re) {
         throw new IllegalArgumentException("Expected");
     }
 
-    void test_another2(NullPointerException re) {
+    void test_another2(RuntimeException re) {
         throw new IllegalArgumentException("Not Expected");
     }
 
