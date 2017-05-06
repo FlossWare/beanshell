@@ -69,6 +69,8 @@ BUnit() {
         }
 
         print("        Failed:  Unexpected exception raised - [" + targetError.getTarget().getClass().getName() + "] - " + computeFailureMessage(targetError));
+
+        throw targetError;
     }
 
     /**
@@ -82,7 +84,7 @@ BUnit() {
         if (!isParameters(bshMethod)) {
             print("        Failed:  " + computeFailureMessage(targetError));
 
-            return;
+            throw targetError;
         }
 
         processFailures(bshMethod, targetError);
@@ -104,19 +106,69 @@ BUnit() {
     }
 
     /**
+     * Execute one of the housekeeping methods like beforeClass, afterClass, before and after.
+     *
+     * @param toTest is the object to run the housekeeping methods on.
+     * @param bshMethod is the housekeeping method to run.
+     */
+    void runHouseKeepingMethod(toTest, bsh.BshMethod bshMethod) {
+        if (null == bshMethod) {
+            return;
+        }
+
+        try {
+            toTest.invokeMethod(bshMethod.getName(), new Object[bshMethod.getParameterTypes().length]);
+        } catch(bsh.TargetError targetError) {
+            print("    WARNING:  Trouble executing housekeep method [" + bshMethod.getName() + "] - " + computeFailureMessage(targetError));
+        }
+    }
+
+    /**
+     * Execute the before() method on toTest.
+     *
+     * @param toTest is the object to test.
+     */
+    void runBefore(toTest) {
+        runHouseKeepingMethod(toTest, toTest.namespace.methods.get("before"));
+    }
+
+    /**
+     * Execute the after() method on toTest.
+     *
+     * @param toTest is the object to test.
+     */
+    void runAfter(toTest) {
+        runHouseKeepingMethod(toTest, toTest.namespace.methods.get("after"));
+    }
+
+    /**
      * Test an inidividual method on an object.
      *
      * @param toTest the object to test.
      * @param methodName is the name of the method to test.
      */
     void testMethod(toTest, String methodName) {
-        print("    Testing method [" + methodName + "]");    
-
         if (!isTestMethod(methodName)) {
             return;
         }
         
-        testMethod(toTest, toTest.namespace.methods.get(methodName));
+        runBefore(toTest);
+
+        print("    Testing method [" + methodName + "]");    
+
+        bsh.TargetError realFailure = null;
+
+        try {
+            testMethod(toTest, toTest.namespace.methods.get(methodName));
+        } catch(bsh.TargetError targetError) {
+            realFailure = targetError;
+        }
+
+        runAfter(toTest);
+
+        if (null != realFailure) {
+            throw realFailure;
+        }
     }
 
     /**
@@ -132,6 +184,20 @@ BUnit() {
     }
 
     /**
+     * Execute the beforeClass() method.
+     */
+    void runBeforeClass(toTest) {
+        runHouseKeepingMethod(toTest, toTest.namespace.methods.get("beforeClass"));
+    }
+
+    /**
+     * Execute the beforeClass() method.
+     */
+    void runAfterClass(toTest) {
+        runHouseKeepingMethod(toTest, toTest.namespace.methods.get("afterClass"));
+    }
+
+    /**
      * Test a test file.
      *
      * @param testFile is the file to test.
@@ -141,7 +207,21 @@ BUnit() {
 
         eval("toTest=" + fileUtils.computeBaseName(testFile) + "()");
 
-        testObject(toTest, toTest.namespace.methods.keySet());
+        runBeforeClass(toTest);
+
+        bsh.TargetError realFailure = null;
+
+        try {
+            testObject(toTest, toTest.namespace.methods.keySet());
+        } catch(bsh.TargetError targetError) {
+            realFailure = targetError;
+        }
+
+        runAfterClass(toTest);
+
+        if (null != failure) {
+            System.exit(1);
+        }
     }
 
     /**
@@ -151,6 +231,8 @@ BUnit() {
      */
     void runTests(File[] testFiles) {
         for (File testFile : testFiles) {
+            print(testFile.getName());
+
             runTest(testFile);
         }
     }
@@ -160,6 +242,7 @@ BUnit() {
      *
      * @param srcDir is the directory containing source files.
      * @param testDir is the directory containing test files.
+     * @param stopOnError if true, test run will stop when failure arises.
      */
     void runTests(String srcDir, String testDir) {
         addClassPath(srcDir);
@@ -167,31 +250,6 @@ BUnit() {
 
         runTests(findAllTestFiles(testDir));
     }
-
-    /**
-     * Run all tests found in testDir using the source found in srcDir.
-     *
-     * @param srcDir is the directory containing source files.
-     * @param testDir is the directory containing test files.
-     */
-     /*
-    void runTests(String srcDir, String testDir) {
-        runTests(new File(srcDir), new File(testDir));
-    }
-    */
-
-        /*
-        for (URL str : getClassPath()) {
-            System.out.println("Class path = " + str);
-        }
-
-        stringUtils = StringUtils();
-
-        for (String m : stringUtils.methods) {
-            System.out.println(m);
-        }
-    }
-    */
 
     return this;
 }

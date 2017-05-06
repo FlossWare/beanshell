@@ -17,21 +17,6 @@
 
             bunit = BUnit();
             bunit.runTests("/home/sfloess/Development/github/FlossWare/beanshell/bsh", "/home/sfloess/Development/github/FlossWare/beanshell/test");
-
-            /**
-
-            stringUtils = StringUtils();
-
-            Assert.assertTrue("Should be blank", stringUtils.isBlank(null));
-            Assert.assertTrue("Should be blank", stringUtils.isBlank(""));
-            Assert.assertTrue("Should be blank", stringUtils.isBlank("  "));
-            Assert.assertTrue("Should be blank", stringUtils.isBlank("          "));
-
-            Assert.assertFalse("Should not be blank", stringUtils.isBlank("hello world"));
-
-            junit = JUnit();
-            junit.findAllTests();
-            **/
         ]]>
     </scriptdef>
 

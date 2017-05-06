@@ -6,6 +6,22 @@ StringUtilsTest() {
 
     stringUtils = StringUtils();
 
+    void before() {
+        print("*** IN BEFORE ***");
+    }
+
+    void after() {
+        print("*** IN AFTER ***");
+    }
+
+    void beforeClass() {
+        print("*** IN BEFORE CLASS ***");
+    }
+
+    void afterClass() {
+        print("*** IN AFTER CLASS ***");
+    }
+
     void test_isBlank() {
         Assert.assertTrue("Should be blank", stringUtils.isBlank(null));
         Assert.assertTrue("Should be blank", stringUtils.isBlank(""));
