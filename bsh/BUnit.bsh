@@ -38,8 +38,8 @@ BUnit() {
      *
      * @return the compute message.
      */
-    String computeFailureMessage(bsh.TargetError targetError) {
-        return targetError.toString().split("\\n")[0];
+    String computeFailureMessage(error) {
+        return "        " + error.toString().replaceAll("\n", "\n        ");
     }
     
     /**
@@ -62,13 +62,15 @@ BUnit() {
     void processFailures(bsh.BshMethod bshMethod, bsh.TargetError targetError) {
         for(Class klass : bshMethod.getParameterTypes()) {
             if (klass.isAssignableFrom(targetError.getTarget().getClass())) {
-                print("        Passed");
+                print("    Passed:  " + bshMethod.getName());
                 
                 return;
             }
         }
 
-        print("        Failed:  Unexpected exception raised - [" + targetError.getTarget().getClass().getName() + "] - " + computeFailureMessage(targetError));
+        print("    Failed:  " + bshMethod.getName());
+        print("             Unexpected exception raised:  " + targetError.getTarget().getClass().getName());
+        print(computeFailureMessage(targetError));
 
         throw targetError;
     }
@@ -82,7 +84,8 @@ BUnit() {
      */
     void processFailure(toTest, bsh.BshMethod bshMethod, bsh.TargetError targetError) {
         if (!isParameters(bshMethod)) {
-            print("        Failed:  " + computeFailureMessage(targetError));
+            print("    Failed:  " + bshMethod.getName());
+            print(computeFailureMessage(targetError));
 
             throw targetError;
         }
@@ -99,7 +102,8 @@ BUnit() {
     void testMethod(toTest, bsh.BshMethod bshMethod) {
         try {
             toTest.invokeMethod(bshMethod.getName(), new Object[bshMethod.getParameterTypes().length]);
-            print("        Passed");
+
+            print("    Passed:  " + bshMethod.getName());
         } catch(bsh.TargetError targetError) {
             processFailure(toTest, bshMethod, targetError);
         }
@@ -119,7 +123,8 @@ BUnit() {
         try {
             toTest.invokeMethod(bshMethod.getName(), new Object[bshMethod.getParameterTypes().length]);
         } catch(bsh.TargetError targetError) {
-            print("    WARNING:  Trouble executing housekeeping method [" + bshMethod.getName() + "] - " + computeFailureMessage(targetError));
+            print("    WARNING:  Trouble executing housekeeping method [" + bshMethod.getName() + "]");
+            print(computeFailureMessage(targetError));
         }
     }
 
@@ -153,8 +158,6 @@ BUnit() {
         }
         
         runBefore(toTest);
-
-        print("    Testing method [" + methodName + "]");    
 
         bsh.TargetError realFailure = null;
 
@@ -205,7 +208,13 @@ BUnit() {
     void runTest(File testFile) {
         importCommands(".");
 
-        eval("toTest=" + fileUtils.computeBaseName(testFile) + "()");
+        try {
+            eval("toTest=" + fileUtils.computeBaseName(testFile) + "()");
+        } catch(bsh.EvalError evalError) {
+            print("    WARNING:  Could not test " + testFile.getName() + ":");
+            print(computeFailureMessage(evalError));
+            return;
+        }
 
         runBeforeClass(toTest);
 
@@ -234,6 +243,8 @@ BUnit() {
             print(testFile.getName());
 
             runTest(testFile);
+
+            print("");
         }
     }
 

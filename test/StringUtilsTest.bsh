@@ -13,6 +13,7 @@ StringUtilsTest() {
         Assert.assertTrue("Should be blank", stringUtils.isBlank("          "));
 
         Assert.assertFalse("Should not be blank", stringUtils.isBlank("hello world"));
+        Assert.assertTrue("Should be blank", stringUtils.isBlank("hello world"));
     }
 
     void test_ensure_String_String_null(IllegalArgumentException e) {

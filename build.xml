@@ -13,7 +13,8 @@
             import junit.framework.Assert;
 
             importCommands("bsh");
-            //importCommands("test");
+
+            //debug();
 
             bunit = BUnit();
             bunit.runTests("/home/sfloess/Development/github/FlossWare/beanshell/bsh", "/home/sfloess/Development/github/FlossWare/beanshell/test");

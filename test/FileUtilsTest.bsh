@@ -1,0 +1,10 @@
+/**
+ * Test the StringUtils class.
+ */
+FileUtilsTest() {
+    import junit.framework.Assert;
+
+    void test_foo() {
+    }
+
+}
