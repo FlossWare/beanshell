@@ -201,6 +201,17 @@ BUnit() {
     }
 
     /**
+     * Determine if toTest has any methods.
+     *
+     * @param toTest the object to examine if contains methods.
+     *
+     * @return true if methods are available.
+     */
+    boolean containsMethods(toTest) {
+        return null != toTest.namespace.methods;
+    }
+
+    /**
      * Test a test file.
      *
      * @param testFile is the file to test.
@@ -216,6 +227,12 @@ BUnit() {
             return;
         }
 
+        if (!containsMethods(toTest)) {
+            print("    WARNING:  No methods found - skipping!");
+
+            return;
+        }
+
         runBeforeClass(toTest);
 
         bsh.TargetError realFailure = null;
@@ -228,7 +245,7 @@ BUnit() {
 
         runAfterClass(toTest);
 
-        if (null != failure) {
+        if (null != realFailure) {
             System.exit(1);
         }
     }
