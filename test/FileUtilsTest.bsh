@@ -1,5 +1,5 @@
 /**
- * Test the StringUtils class.
+ * Test the FileUtils class.
  */
 FileUtilsTest() {
     import junit.framework.Assert;
