@@ -1,5 +1,13 @@
 /**
- * BUnit - JUnit ala beanshell...
+ * BUnit - JUnit ala beanshell:
+ *   - All tests are assumed to end in *Test.bsh
+ *   - Within a test file, methods that start with test are considered test methods.
+ *   - If an exception is expected to be raised, those exception types should be included in test method parameters.
+ *   - The following methods will be called if present in the test script:
+ *     - beforeClass():  will be called when the test is instantiated.
+ *     - afterClass():   will be called when all tests have been run.
+ *     - before():       will be called before each test is run.
+ *     - after():        will be called after each test is run.
  */
 BUnit() {
     fileUtils = FileUtils();

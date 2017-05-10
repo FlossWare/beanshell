@@ -4,5 +4,64 @@
 FileUtilsTest() {
     import junit.framework.Assert;
 
+    import java.nio.file.attribute.FileAttribute;
+
+    import java.nio.file.Files;
+    import java.nio.file.Path;
+
+    fileUtils = FileUtils();
+
+    Path tempDir;
+
+    FileAttribute[] nullFileAttributes = new FileAttribute[0];
+
+    void before() {
+        tempDir = Files.createTempDirectory("beanshell", nullFileAttributes);
+    }
+
+    void after() {
+        for (File toDelete :  tempDir.toFile().listFiles()) {
+            toDelete.delete();
+        }
+
+        Files.delete(tempDir);
+    }
+
+    void test_findByExtension_File_String_nullFile(IllegalArgumentException iae) {
+        fileUtils.findByExtension(null, "*.tst");
+    }
+
+    void test_findByExtension_File_String_blankExtension(IllegalArgumentException iae) {
+        fileUtils.findByExtension(new File("/tmp/foo"), "   ");
+    }
+
+    void test_findByExtension_File_String_nullExtension(IllegalArgumentException iae) {
+        fileUtils.findByExtension(new File("/tmp/foo"), null);
+    }
+
+    void test_findByExtension_File_String(IllegalArgumentException iae) {
+        int total = 10;
+        List files = new ArrayList(total);
+
+        for (int index = 0; index < total; index++) {
+            files.add(Files.createTempFile(tempDir, "testPrefix", "testSuffix", nullFileAttributes).toFile());
+        }
+
+        File file1 = Files.createTempFile(tempDir, "prefix1", "suffix1", nullFileAttributes).toFile();
+        File file2 = Files.createTempFile(tempDir, "prefix2", "suffix2", nullFileAttributes).toFile();
+
+        for (File fileFound : fileUtils.findByExtension(tempDir.toFile(), "testSuffix")) {
+            Assert.assertTrue("Should have deleted the file", fileFound.delete());
+            Assert.assertTrue("Should have removed the file", files.remove(fileFound));
+        }
+
+        Assert.assertEquals("Should have 2 files left", 2, tempDir.toFile().list().length);
+
+        Assert.assertTrue("Should have removed file", file1.delete());
+        Assert.assertTrue("Should haveremoved file", file2.delete());
+
+        Assert.assertEquals("Should be no files", 0, tempDir.toFile().list().length);
+    }
+
     return this;
 }
