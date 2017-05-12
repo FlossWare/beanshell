@@ -15,10 +15,16 @@ FileUtilsTest() {
 
     FileAttribute[] nullFileAttributes = new FileAttribute[0];
 
+    /**
+     * Set up a temp dir before test starts.
+     */
     void before() {
         tempDir = Files.createTempDirectory("beanshell", nullFileAttributes);
     }
 
+    /**
+     * Clean up temp dir once test done.
+     */
     void after() {
         for (File toDelete :  tempDir.toFile().listFiles()) {
             toDelete.delete();
@@ -27,18 +33,45 @@ FileUtilsTest() {
         Files.delete(tempDir);
     }
 
+    /**
+     * Test finding by extension where file provided is null.
+     *
+     * Should raise an IllegalArgumentException.
+     */
     void test_findByExtension_File_String_nullFile(IllegalArgumentException iae) {
         fileUtils.findByExtension(null, "*.tst");
     }
 
+    /**
+     * Test finding by extension where the extension is empty.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_findByExtension_File_String_emptyExtension(IllegalArgumentException iae) {
+        fileUtils.findByExtension(new File("/tmp/foo"), "");
+    }
+
+    /**
+     * Test finding by extension where the extension is blank.
+     *
+     * Should raise an IllegalArgumentException.
+     */
     void test_findByExtension_File_String_blankExtension(IllegalArgumentException iae) {
         fileUtils.findByExtension(new File("/tmp/foo"), "   ");
     }
 
+    /**
+     * Test finding by extension where the extension is null.
+     *
+     * Should raise an IllegalArgumentException.
+     */
     void test_findByExtension_File_String_nullExtension(IllegalArgumentException iae) {
         fileUtils.findByExtension(new File("/tmp/foo"), null);
     }
 
+    /**
+     * Test finding by extension.
+     */
     void test_findByExtension_File_String() {
         int total = 10;
         List files = new ArrayList(total);
@@ -51,6 +84,87 @@ FileUtilsTest() {
         File file2 = Files.createTempFile(tempDir, "prefix2", "suffix2", nullFileAttributes).toFile();
 
         for (File fileFound : fileUtils.findByExtension(tempDir.toFile(), "testSuffix")) {
+            Assert.assertTrue("Should have deleted the file", fileFound.delete());
+            Assert.assertTrue("Should have removed the file", files.remove(fileFound));
+        }
+
+        Assert.assertEquals("Should have 2 files left", 2, tempDir.toFile().list().length);
+
+        Assert.assertTrue("Should have removed file", file1.delete());
+        Assert.assertTrue("Should haveremoved file", file2.delete());
+
+        Assert.assertEquals("Should be no files", 0, tempDir.toFile().list().length);
+    }
+
+    /**
+     * Test finding by extension where file provided is null.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_findByExtension_String_String_nullFile(IllegalArgumentException iae) {
+        fileUtils.findByExtension(null, "*.tst");
+    }
+
+    /**
+     * Test finding by extension where file provided is empty.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_findByExtension_String_String_emptyFile(IllegalArgumentException iae) {
+        fileUtils.findByExtension("", "*.tst");
+    }
+
+    /**
+     * Test finding by extension where file provided is blank.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_findByExtension_String_String_blankFile(IllegalArgumentException iae) {
+        fileUtils.findByExtension("  ", "*.tst");
+    }
+
+    /**
+     * Test finding by extension where the extension is empty.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_findByExtension_String_String_emptyExtension(IllegalArgumentException iae) {
+        fileUtils.findByExtension("/tmp/foo", "");
+    }
+
+    /**
+     * Test finding by extension where the extension is blank.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_findByExtension_String_String_blankExtension(IllegalArgumentException iae) {
+        fileUtils.findByExtension("/tmp/foo", "   ");
+    }
+
+    /**
+     * Test finding by extension where the extension is null.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_findByExtension_String_String_nullExtension(IllegalArgumentException iae) {
+        fileUtils.findByExtension("/tmp/foo", null);
+    }
+
+    /**
+     * Test finding by extension.
+     */
+    void test_findByExtension_String_String() {
+        int total = 10;
+        List files = new ArrayList(total);
+
+        for (int index = 0; index < total; index++) {
+            files.add(Files.createTempFile(tempDir, "testPrefix", "testSuffix", nullFileAttributes).toFile());
+        }
+
+        File file1 = Files.createTempFile(tempDir, "prefix1", "suffix1", nullFileAttributes).toFile();
+        File file2 = Files.createTempFile(tempDir, "prefix2", "suffix2", nullFileAttributes).toFile();
+
+        for (File fileFound : fileUtils.findByExtension(tempDir.toFile().getCanonicalPath(), "testSuffix")) {
             Assert.assertTrue("Should have deleted the file", fileFound.delete());
             Assert.assertTrue("Should have removed the file", files.remove(fileFound));
         }

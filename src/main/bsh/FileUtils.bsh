@@ -37,7 +37,7 @@ FileUtils() {
      */
     File[] findByExtension(File dir, String extension) {
         objectUtils.ensure(dir, "Directory is null!");
-        stringUtils.ensure(extension);
+        stringUtils.ensure(extension, "Extension cannot be null or blank");
 
         return dir.listFiles(new FileExtensionFilter(extension));
     }
@@ -51,7 +51,7 @@ FileUtils() {
      * @return a list of files found in dir.
      */
     File[] findByExtension(String dir, String extension) {
-        return findByExtension(new File(dir), extension);
+        return findByExtension(new File(stringUtils.ensure(dir, "Director cannot be null or blank")), extension);
     }
 
     /**
