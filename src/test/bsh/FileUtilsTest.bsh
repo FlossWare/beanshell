@@ -39,7 +39,7 @@ FileUtilsTest() {
         fileUtils.findByExtension(new File("/tmp/foo"), null);
     }
 
-    void test_findByExtension_File_String(IllegalArgumentException iae) {
+    void test_findByExtension_File_String() {
         int total = 10;
         List files = new ArrayList(total);
 

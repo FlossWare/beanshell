@@ -101,6 +101,25 @@ BUnit() {
         processFailures(bshMethod, targetError);
     }
 
+    void processSuccess(bsh.BshMethod bshMethod) {
+        if (!isParameters(bshMethod)) {
+            print("    Passed:  " + bshMethod.getName());
+
+            return;
+        }
+
+        List classList = Arrays.asList(bshMethod.getParameterTypes());
+        List classStrList = new ArrayList(classList.size());
+        for (Class klass : classList) {
+            classStrList.add(klass.getName());
+        }
+
+        print("    Failed:  " + bshMethod.getName());
+        print("        Expected one of " + classStrList);
+
+        System.exit(1);
+    }
+
     /**
      * Test a method on an object.
      *
@@ -111,7 +130,7 @@ BUnit() {
         try {
             toTest.invokeMethod(bshMethod.getName(), new Object[bshMethod.getParameterTypes().length]);
 
-            print("    Passed:  " + bshMethod.getName());
+            processSuccess(bshMethod);
         } catch(bsh.TargetError targetError) {
             processFailure(toTest, bshMethod, targetError);
         }

@@ -12,12 +12,12 @@
         <![CDATA[
             import junit.framework.Assert;
 
-            importCommands("bsh");
+            importCommands("src/main/bsh");
 
             //debug();
 
             bunit = BUnit();
-            bunit.runTests("/home/sfloess/Development/github/FlossWare/beanshell/bsh", "/home/sfloess/Development/github/FlossWare/beanshell/test");
+            bunit.runTests("/home/sfloess/Development/github/FlossWare/beanshell/src/main/bsh", "/home/sfloess/Development/github/FlossWare/beanshell/src/test/bsh");
         ]]>
     </scriptdef>
 
