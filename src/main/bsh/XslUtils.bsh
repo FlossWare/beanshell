@@ -11,7 +11,7 @@ XSLUtils() {
 
     objectUtils = ObjectUtils();
     stringUtils = StringUtils();
-    ioUtils     = IOUtils();
+    ioUtils     = IoUtils();
     fileUtils   = FileUtils();
 
     /**

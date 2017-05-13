@@ -7,7 +7,7 @@ FileUtils() {
      */
     stringUtils = StringUtils();
     objectUtils = ObjectUtils();
-    ioUtils     = IOUtils();
+    ioUtils     = IoUtils();
 
     /**
      * A file name filter that filters by file extension.

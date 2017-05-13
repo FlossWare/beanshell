@@ -1,0 +1,38 @@
+/**
+ * Test the Iotils class.
+ */
+IoUtilsTest() {
+    import junit.framework.Assert;
+
+    ioUtils = IoUtils();
+
+    /**
+     * Test close() with a null closeable.
+     */
+    void test_close_Closeable_String_null() {
+        ioUtils.close(null, "");
+    }
+
+    /**
+     * Test close() with a closeable.
+     */
+    void test_close_Closeable_String() {
+        ioUtils.close(new ByteArrayOutputStream(), "");
+    }
+
+    /**
+     * Test close() with a null closeable.
+     */
+    void test_close_Closeable_null() {
+        ioUtils.close(null);
+    }
+
+    /**
+     * Test close() with a closeable.
+     */
+    void test_close_Closeable() {
+        ioUtils.close(new ByteArrayOutputStream());
+    }
+
+    return this;
+}

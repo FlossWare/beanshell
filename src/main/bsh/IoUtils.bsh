@@ -1,7 +1,7 @@
 /**
  * IO utility class.
  */
-IOUtils() {
+IoUtils() {
     /**
      * Attempt to close a Closeable.
      *
