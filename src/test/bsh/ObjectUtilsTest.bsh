@@ -1,0 +1,46 @@
+/**
+ * Test the ObjectUtils class.
+ */
+ObjectUtilsTest() {
+    import junit.framework.Assert;
+
+    objectUtils = ObjectUtils();
+
+    /**
+     * Test a null object.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_ensure_obj_String_null(IllegalArgumentException iae) {
+        objectUtils.ensure(null, "");
+    }
+
+    /**
+     * Test ensuring an object.
+     */
+    void test_ensure_obj_String() {
+        Object toExpect = new Object();
+
+        Assert.assertSame("Should be the same object", toExpect, objectUtils.ensure(toExpect, ""));
+    }
+
+    /**
+     * Test a null object.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_ensure_obj_null(IllegalArgumentException iae) {
+        objectUtils.ensure(null);
+    }
+
+    /**
+     * Test ensuring an object.
+     */
+    void test_ensure_obj() {
+        Object toExpect = new Object();
+
+        Assert.assertSame("Should be the same object", toExpect, objectUtils.ensure(toExpect));
+    }
+
+    return this;
+}

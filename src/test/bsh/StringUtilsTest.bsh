@@ -6,6 +6,9 @@ StringUtilsTest() {
 
     stringUtils = StringUtils();
 
+    /**
+     * Test strings being blank.
+     */
     void test_isBlank() {
         Assert.assertTrue("Should be blank", stringUtils.isBlank(null));
         Assert.assertTrue("Should be blank", stringUtils.isBlank(""));
@@ -15,29 +18,77 @@ StringUtilsTest() {
         Assert.assertFalse("Should not be blank", stringUtils.isBlank("hello world"));
     }
 
+    /**
+     * Test a null string.
+     *
+     * Should throw an IllegalArgumentException.
+     */
     void test_ensure_String_String_null(IllegalArgumentException e) {
         stringUtils.ensure(null, "Foo");
     }
 
+    /**
+     * Test a blank string.
+     *
+     * Should throw an IllegalArgumentException.
+     */
     void test_ensure_String_String_blank(IllegalArgumentException e) {
         stringUtils.ensure("    ", "Foo");
     }
 
+    /**
+     * Test an empty string.
+     *
+     * Should throw an IllegalArgumentException.
+     */
     void test_ensure_String_String_empty(IllegalArgumentException e) {
         stringUtils.ensure("", "Foo");
     }
 
+    /**
+     * Test a string.
+     */
+    void test_ensure_String_String() {
+        String toCompare = "Testing " + System.currentTimeMillis();
+
+        Assert.assertSame("Should be the same string", toCompare, stringUtils.ensure(toCompare, "Foo"));
+    }
+
+    /**
+     * Test a null string.
+     *
+     * Should throw an IllegalArgumentException.
+     */
     void test_ensure_String_null(IllegalArgumentException e) {
         stringUtils.ensure(null);
     }
 
+    /**
+     * Test a blank string.
+     *
+     * Should throw an IllegalArgumentException.
+     */
     void test_ensure_String_blank(IllegalArgumentException e) {
         stringUtils.ensure("    ");
     }
 
+    /**
+     * Test an empty string.
+     *
+     * Should throw an IllegalArgumentException.
+     */
     void test_ensure_String_empty(IllegalArgumentException e) {
         stringUtils.ensure("");
     }
 
+    /**
+     * Test a string.
+     */
+    void test_ensure_String() {
+        String toCompare = "Testing " + System.currentTimeMillis();
+
+        Assert.assertSame("Should be the same string", toCompare, stringUtils.ensure(toCompare, "Foo"));
+    }
+    
     return this;
 }
