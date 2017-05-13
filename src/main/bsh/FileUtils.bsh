@@ -55,16 +55,16 @@ FileUtils() {
     }
 
     /**
-     * Compute the relative dir name.
+     * Compute the dir name.
      *
-     * @param file is the name of the file we desire the relative directory.
+     * @param file is the name of the file we desire the directory name.
      *
-     * @return the relative directory name.
+     * @return the directory name.
      *
      * @throws IllegalArgumentException if file is null or blank.
      */
-    String computeRelativeDirName(String file) {
-        return new File(stringUtils.ensure(file, "File is blank - cannot compute relateive dir name!")).getName();
+    String computeDirName(String file) {
+        return new File(stringUtils.ensure(file, "File is blank - cannot compute relateive dir name!")).getAbsolutePath();
     }
 
     /**

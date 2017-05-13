@@ -177,5 +177,24 @@ FileUtilsTest() {
         Assert.assertEquals("Should be no files", 0, tempDir.toFile().list().length);
     }
 
+    void test_computeDirName_null(IllegalArgumentException iae) {
+        fileUtils.computeDirName(null);
+    }
+
+    void test_computeDirName_blank(IllegalArgumentException iae) {
+        fileUtils.computeDirName("    ");
+    }
+
+    void test_computeDirName_empty(IllegalArgumentException iae) {
+        fileUtils.computeDirName("");
+    }
+
+    void test_computeDirName() {
+        Assert.assertEquals("Should be the correct dir name", "/foo/bar", fileUtils.computeDirName("/foo/bar/alpha.txt"));
+        Assert.assertEquals("Should be the correct dir name", "bar/alpha", fileUtils.computeDirName("bar"));
+        Assert.assertEquals("Should be the correct dir name", "bar/alpha/beta.txt", fileUtils.computeDirName("bar/alpha"));
+        Assert.assertEquals("Should be the correct dir name", "/", fileUtils.computeDirName("/beta.txt"));
+    }
+
     return this;
 }
