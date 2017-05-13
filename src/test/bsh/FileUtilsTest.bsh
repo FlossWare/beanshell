@@ -388,13 +388,11 @@ FileUtilsTest() {
      * Should throw an IllegalArgumentException.
      */
     void test_toString_File_null(IllegalArgumentException iae) {
-        fileUtils.toString(null);
+        fileUtils.toString((File) null);
     }
 
     /**
      * Test converting a file to a string.
-     *
-     * Should throw an IllegalArgumentException.
      */
     void test_toString_File() {
         File file1 = Files.createTempFile(tempDir, "to", "string", nullFileAttributes).toFile();
@@ -404,6 +402,82 @@ FileUtilsTest() {
         fileUtils.toFile(file1, toCompare);
 
         Assert.assertEquals("Should be the same contents", toCompare, fileUtils.toString(file1));
+    }
+
+    /**
+     * Test converting a null file name to a string.
+     *
+     * Should throw an IllegalArgumentException.
+     */
+    void test_toString_String_null(IllegalArgumentException iae) {
+        fileUtils.toString((String) null);
+    }
+
+    /**
+     * Test converting a blank file name to a string.
+     *
+     * Should throw an IllegalArgumentException.
+     */
+    void test_toString_String_blank(IllegalArgumentException iae) {
+        fileUtils.toString("    ");
+    }
+
+    /**
+     * Test converting an empty file name to a string.
+     *
+     * Should throw an IllegalArgumentException.
+     */
+    void test_toString_String_empty(IllegalArgumentException iae) {
+        fileUtils.toString("");
+    }
+
+    /**
+     * Test converting a file to a string.
+     */
+    void test_toString_String() {
+        String file1 = Files.createTempFile(tempDir, "to", "string", nullFileAttributes).toFile().getAbsolutePath();
+
+        String toCompare = "This is from " + System.currentTimeMillis();
+
+        fileUtils.toFile(file1, toCompare);
+
+        Assert.assertEquals("Should be the same contents", toCompare, fileUtils.toString(file1));
+    }
+
+    /**
+     * Test converting a string to a file where the file is null.
+     *
+     * Should throw an IllegalArgumentException.
+     */
+    void test_toFile_File_null(IllegalArgumentException iae) {
+        fileUtils.toFile((File) null, "");
+    }
+
+    /**
+     * Test converting a string to a file where the file name is null.
+     *
+     * Should throw an IllegalArgumentException.
+     */
+    void test_toFile_String_null(IllegalArgumentException iae) {
+        fileUtils.toFile((String) null, "");
+    }
+
+    /**
+     * Test converting a string to a file where the file name is blank.
+     *
+     * Should throw an IllegalArgumentException.
+     */
+    void test_toFile_String_blank(IllegalArgumentException iae) {
+        fileUtils.toFile("    ", "");
+    }
+
+    /**
+     * Test converting a string to a file where the file name is empty.
+     *
+     * Should throw an IllegalArgumentException.
+     */
+    void test_toFile_String_empty(IllegalArgumentException iae) {
+        fileUtils.toFile("", "");
     }
 
     return this;
