@@ -177,23 +177,233 @@ FileUtilsTest() {
         Assert.assertEquals("Should be no files", 0, tempDir.toFile().list().length);
     }
 
-    void test_computeDirName_null(IllegalArgumentException iae) {
+    /**
+     * Test computing a relative directory name when a null is provided.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_computeRelativeDirName_null(IllegalArgumentException iae) {
         fileUtils.computeDirName(null);
     }
 
-    void test_computeDirName_blank(IllegalArgumentException iae) {
+    /**
+     * Test computing a relative directory name when a blank is provided.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_computeRelativeDirName_blank(IllegalArgumentException iae) {
         fileUtils.computeDirName("    ");
     }
 
-    void test_computeDirName_empty(IllegalArgumentException iae) {
+    /**
+     * Test computing a relative directory name when an empty string is provided.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_computeRelativeDirName_empty(IllegalArgumentException iae) {
         fileUtils.computeDirName("");
     }
 
-    void test_computeDirName() {
+    /**
+     * Test computing a relative directory name.
+     */
+    void test_computeRelativeDirName() {
+        Assert.assertEquals("Should be the correct dir name", "bar", fileUtils.computeRelativeDirName("/foo/bar/alpha.txt"));
+        Assert.assertEquals("Should be the correct dir name", "", fileUtils.computeRelativeDirName("bar"));
+        Assert.assertEquals("Should be the correct dir name", "bar", fileUtils.computeRelativeDirName("bar/alpha"));
+        Assert.assertEquals("Should be the correct dir name", "", fileUtils.computeRelativeDirName("/beta.txt"));
+    }
+
+    /**
+     * Test computing a directory name where the file is null.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_computeDirName_String_null(IllegalArgumentException iae) {
+        fileUtils.computeDirName((String) null);
+    }
+
+    /**
+     * Test computing a directory name where the file is blank.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_computeDirName_String_blank(IllegalArgumentException iae) {
+        fileUtils.computeDirName("    ");
+    }
+
+    /**
+     * Test computing a directory name where the file is empty.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_computeDirName_String_empty(IllegalArgumentException iae) {
+        fileUtils.computeDirName("");
+    }
+
+    /**
+     * Test computing a directory name.
+     */
+    void test_computeDirName_String() {
         Assert.assertEquals("Should be the correct dir name", "/foo/bar", fileUtils.computeDirName("/foo/bar/alpha.txt"));
-        Assert.assertEquals("Should be the correct dir name", "bar/alpha", fileUtils.computeDirName("bar"));
-        Assert.assertEquals("Should be the correct dir name", "bar/alpha/beta.txt", fileUtils.computeDirName("bar/alpha"));
+        Assert.assertEquals("Should be the correct dir name", "", fileUtils.computeDirName("bar"));
+        Assert.assertEquals("Should be the correct dir name", "bar", fileUtils.computeDirName("bar/alpha"));
         Assert.assertEquals("Should be the correct dir name", "/", fileUtils.computeDirName("/beta.txt"));
+    }
+
+    /**
+     * Test computing a directory name where the file is blank.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_computeDirName_File_null(IllegalArgumentException iae) {
+        fileUtils.computeDirName((File) null);
+    }
+
+    /**
+     * Test computing a directory name.
+     */
+    void test_computeDirName_File() {
+        Assert.assertEquals("Should be the correct dir name", "/foo/bar", fileUtils.computeDirName(new File("/foo/bar/alpha.txt")));
+        Assert.assertEquals("Should be the correct dir name", bsh.cwd, fileUtils.computeDirName(new File("bar")));
+        Assert.assertEquals("Should be the correct dir name", bsh.cwd + System.getProperty("file.separator") + "bar", fileUtils.computeDirName(new File("bar/alpha")));
+        Assert.assertEquals("Should be the correct dir name", "/", fileUtils.computeDirName(new File("/beta.txt")));
+    }
+
+    /**
+     * Tests computing the base name of a null file.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_computeBaseName_File_null(IllegalArgumentException iae) {
+        fileUtils.computeBaseName((File) null);
+    }
+
+    /**
+     * Tests computing the base name of a file.
+     */
+    void test_computeBaseName_File() {
+        Assert.assertEquals("Should be the correct base name", "theta", fileUtils.computeBaseName(new File("/home/alpha/beta/theta.txt")));
+        Assert.assertEquals("Should be the correct base name", "theta", fileUtils.computeBaseName(new File("/home/alpha/beta/theta")));
+        Assert.assertEquals("Should be the correct base name", "foo", fileUtils.computeBaseName(new File("/foo.txt")));
+        Assert.assertEquals("Should be the correct base name", "foo", fileUtils.computeBaseName(new File("foo.txt")));
+    }
+
+    /**
+     * Tests computing the base name of a null file name.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_computeBaseName_String_null(IllegalArgumentException iae) {
+        fileUtils.computeBaseName((String) null);
+    }
+
+    /**
+     * Tests computing the base name of a blank file name.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_computeBaseName_String_blank(IllegalArgumentException iae) {
+        fileUtils.computeBaseName("    ");
+    }
+
+    /**
+     * Tests computing the base name of an empty file name.
+     *
+     * Should raise an IllegalArgumentException.
+     */
+    void test_computeBaseName_String_empty(IllegalArgumentException iae) {
+        fileUtils.computeBaseName("");
+    }
+
+    /**
+     * Tests computing the base name of a file.
+     */
+    void test_computeBaseName_String() {
+        Assert.assertEquals("Should be the correct base name", "theta", fileUtils.computeBaseName("/home/alpha/beta/theta.txt"));
+        Assert.assertEquals("Should be the correct base name", "theta", fileUtils.computeBaseName("/home/alpha/beta/theta"));
+        Assert.assertEquals("Should be the correct base name", "foo", fileUtils.computeBaseName("/foo.txt"));
+        Assert.assertEquals("Should be the correct base name", "foo", fileUtils.computeBaseName("foo.txt"));
+    }
+
+    /**
+     * Tests file computation.
+     */
+    void test_computeFiles() {
+        Assert.assertNotNull("Should not be null", fileUtils.computeFiles(null));
+        Assert.assertEquals("Should be no elements", 0, fileUtils.computeFiles(null).length);
+
+        File[] toCheck = new File[] {new File("/foo/bar"), new File("/alpha/beta")};
+
+        Assert.assertSame("Should be same", toCheck, fileUtils.computeFiles(toCheck));
+    }
+
+    /**
+     * Test if a dir using a null string.
+     *
+     * Should throw an IllegalArgumentException.
+     */
+    void test_isDir_null(IllegalArgumentException iae) {
+        fileUtils.isDir(null);
+    }
+
+    /**
+     * Test if a dir using a blank string.
+     *
+     * Should throw an IllegalArgumentException.
+     */
+    void test_isDir_blank(IllegalArgumentException iae) {
+        fileUtils.isDir("    ");
+    }
+
+    /**
+     * Test if a dir using an empty string.
+     *
+     * Should throw an IllegalArgumentException.
+     */
+    void test_isDir_empty(IllegalArgumentException iae) {
+        fileUtils.isDir("");
+    }
+
+    /**
+     * Test if a dir.
+     */
+    void test_isDir() {
+        File file1 = Files.createTempFile(tempDir, "is", "file", nullFileAttributes).toFile();
+        File file2 = Files.createTempFile(tempDir, "is", "file", nullFileAttributes).toFile();
+
+        File dir1 = Files.createTempDirectory(tempDir, "dir", nullFileAttributes).toFile();
+        File dir2 = Files.createTempDirectory(tempDir, "dir", nullFileAttributes).toFile();
+
+        Assert.assertFalse("Should not be a directory", fileUtils.isDir(file1.getAbsolutePath()));
+        Assert.assertFalse("Should not be a directory", fileUtils.isDir(file2.getAbsolutePath()));
+
+        Assert.assertTrue("Should be a directory", fileUtils.isDir(dir1.getAbsolutePath()));
+        Assert.assertTrue("Should be a directory", fileUtils.isDir(dir2.getAbsolutePath()));
+    }
+
+    /**
+     * Test converting a null file to a string.
+     *
+     * Should throw an IllegalArgumentException.
+     */
+    void test_toString_File_null(IllegalArgumentException iae) {
+        fileUtils.toString(null);
+    }
+
+    /**
+     * Test converting a file to a string.
+     *
+     * Should throw an IllegalArgumentException.
+     */
+    void test_toString_File() {
+        File file1 = Files.createTempFile(tempDir, "to", "string", nullFileAttributes).toFile();
+
+        String toCompare = "This is from " + System.currentTimeMillis();
+
+        fileUtils.toFile(file1, toCompare);
+
+        Assert.assertEquals("Should be the same contents", toCompare, fileUtils.toString(file1));
     }
 
     return this;

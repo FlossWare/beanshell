@@ -101,6 +101,12 @@ BUnit() {
         processFailures(bshMethod, targetError);
     }
 
+    /**
+     * When a test method passes successfully, we want to ensure we didn't
+     * have any parameters that denoted an exception should have been raised.
+     *
+     * @param bshMethod is the test method that passed successfully.
+     */
     void processSuccess(bsh.BshMethod bshMethod) {
         if (!isParameters(bshMethod)) {
             print("    Passed:  " + bshMethod.getName());
@@ -115,7 +121,7 @@ BUnit() {
         }
 
         print("    Failed:  " + bshMethod.getName());
-        print("        Expected one of " + classStrList);
+        print("        Expected one of " + classStrList.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
 
         System.exit(1);
     }
@@ -192,6 +198,9 @@ BUnit() {
             testMethod(toTest, toTest.namespace.methods.get(methodName));
         } catch(bsh.TargetError targetError) {
             realFailure = targetError;
+        } catch(bsh.EvalError evalError) {
+            print("    WARNING:  Could not test " + methodName + ":");
+            print(computeFailureMessage(evalError));
         }
 
         runAfter(toTest);
@@ -199,6 +208,25 @@ BUnit() {
         if (null != realFailure) {
             throw realFailure;
         }
+    }
+
+    /**
+     * Test an inidividual method on an object.
+     *
+     * @param toTest the object to test.
+     * @param methodNames is the name of the method to test.
+     */
+    void testMethod(toTest, List methods) {
+        List duplicateMethods = new ArrayList(methods.size());
+
+        for (bsh.BshMethod method : methods) {
+            duplicateMethods.add(method.getName() + "()");
+        }
+
+        print("    Failed:  Duplicate test methods failed!");
+        print("        " + duplicateMethods.toString().replaceAll("\\[", "").replaceAll("\\]", ""));
+
+        System.exit(1);
     }
 
     /**
@@ -268,6 +296,8 @@ BUnit() {
             testObject(toTest, toTest.namespace.methods.keySet());
         } catch(bsh.TargetError targetError) {
             realFailure = targetError;
+        } catch(bsh.EvalError evalError) {
+            realFailure = evalError;
         }
 
         runAfterClass(toTest);

@@ -55,6 +55,23 @@ FileUtils() {
     }
 
     /**
+     * Compute the relative dir name.
+     *
+     * @param file is the name of the file we desire the relative directory name.
+     *
+     * @return the relative directory name.
+     *
+     * @throws IllegalArgumentException if file is null or blank.
+     */
+    String computeRelativeDirName(String file) {
+        stringUtils.ensure(file, "File is blank - cannot compute relative dir name!");
+
+        File realFile = new File(file);
+        
+        return (null == realFile.getParentFile() ? "" : realFile.getParentFile().getName());
+    }
+
+    /**
      * Compute the dir name.
      *
      * @param file is the name of the file we desire the directory name.
@@ -64,7 +81,28 @@ FileUtils() {
      * @throws IllegalArgumentException if file is null or blank.
      */
     String computeDirName(String file) {
-        return new File(stringUtils.ensure(file, "File is blank - cannot compute relateive dir name!")).getAbsolutePath();
+        stringUtils.ensure(file, "File is blank - cannot compute dir name!");
+
+        int lastIndexOf = file.lastIndexOf(System.getProperty("file.separator"));
+
+        if (lastIndexOf == -1) {
+            return "";
+        }
+
+        return file.substring(0, (0 == lastIndexOf ? 1 : lastIndexOf));
+    }
+
+    /**
+     * Compute the dir name.
+     *
+     * @param file is the file we desire the directory name.
+     *
+     * @return the directory name.
+     *
+     * @throws IllegalArgumentException if file is null or blank.
+     */
+    String computeDirName(File file) {
+        return computeDirName(objectUtils.ensure(file, "Cannot have a null file!").getAbsolutePath());
     }
 
     /**
@@ -78,6 +116,17 @@ FileUtils() {
          objectUtils.ensure(file, "File is null - cannot compute base name!");
 
          return file.getName().split("\\.") [0];
+     }
+
+    /**
+     * Computes the base name for a file.
+     *
+     * @param file is the name of a file to compuate the base name.
+     *
+     * @throws IllegalArgumentException if file is null, blank or empty.
+     */
+     String computeBaseName(String file) {
+         return computeBaseName(new File(stringUtils.ensure(file, "Cannot have a null or blank file name")));
      }
 
     /**
@@ -114,19 +163,23 @@ FileUtils() {
         objectUtils.ensure(file, "Cannot convert file to a string - it's null!");
 
         RandomAccessFile raf = null;
+
+        String retVal = "";
         
         try {
-            raf = new RandomAccessFile(file, "+r");
+            raf = new RandomAccessFile(file, "r");
             
             byte[] rawData = new byte[raf.length()];
 
-            raf.read(raf);
+            raf.read(rawData);
 
-            return new String(rawData);
+            retVal = new String(rawData);
             
         } finally {
             ioUtils.close(raf);
         }
+
+        return retVal;
     }
 
     /**
@@ -154,7 +207,7 @@ FileUtils() {
         RandomAccessFile raf = null;
 
         try {
-            raf = new RandomeAccessFile(file, "+rw");
+            raf = new RandomAccessFile(file, "rw");
             raf.write(null != str ? str.getBytes() : "".getBytes());
         } finally {
             ioUtils.close(raf);
