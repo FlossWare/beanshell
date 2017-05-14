@@ -17,9 +17,10 @@ XPathUtilsTest() {
     void test_evaluate_XPath_String_InputStream() {
         XPath xpath = xpathUtils.createXPath();
 
-        //print(xpathUtils.evaluate(xpath, "/persons/person[0]/first", Object.class.getResourceAsStream("/foo.xml")));
-        print(Object.class.getResourceAsStream("/foo.xml"));
-        print(Object.class.getResourceAsStream("foo.xml"));
+        Assert.assertEquals("Should be correct value", "Joe", xpathUtils.evaluate(xpath, "/persons/person[1]/first", getResource("/foo.xml").openStream()).trim());
+        Assert.assertEquals("Should be correct value", "Blow", xpathUtils.evaluate(xpath, "/persons/person[1]/last", getResource("/foo.xml").openStream()).trim());
+        Assert.assertEquals("Should be correct value", "John", xpathUtils.evaluate(xpath, "/persons/person[2]/first", getResource("/foo.xml").openStream()).trim());
+        Assert.assertEquals("Should be correct value", "Does", xpathUtils.evaluate(xpath, "/persons/person[2]/last", getResource("/foo.xml").openStream()).trim());
     }
 
     return this;
