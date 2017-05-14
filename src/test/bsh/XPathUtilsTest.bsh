@@ -1,0 +1,17 @@
+/**
+ * Test the XPathUtils class.
+ */
+XPathUtilsTest() {
+    import junit.framework.Assert;
+
+    xpathUtils = XPathUtils();
+
+    /**
+     * Test creating an XPath.
+     */
+    void test_createXPath() {
+        Assert.assertNotNull("Should have create an XPath blank", xpathUtils.createXPath());
+    }
+
+    return this;
+}

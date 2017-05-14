@@ -11,6 +11,7 @@ XPathUtils() {
     fileUtils   = FileUtils();
     stringUtils = StringUtils();
     objectUtils = ObjectUtils();
+    ioUtils     = IoUtils();
 
     /**
      * Return a new XPath.
@@ -38,6 +39,53 @@ XPathUtils() {
          objectUtils.ensure(inputStream, "The input stream is null!");
 
          return xpath.evaluate(toEvaluate, new InputSource(inputStream));
+     }
+
+    /**
+     * Evaluate an xpath for a file.
+     *
+     * @param xpath is the xpath to evaluate.
+     * @param toEvaluate is the string to evaluate against the xpath.
+     * @param file is the file containing the string to apply the XPath.
+     *
+     * @return the evaluated XPath.
+     *
+     * @throws IllegalArgumentException if xpath, toEvaluate or file are null (or blank if toEvaluate).
+     */
+     String evaluate(XPath xpath, String toEvaluate, File file) {
+         objectUtils.ensure(xpath, "XPath is null!");
+         stringUtils.ensure(toEvaluate, "The XPath string to evaluate is blank!");
+         stringUtils.ensure(file, "The file to use is null!");
+
+         FileInputStream fis = null; 
+         
+         try {
+             fis = new FileInputStream(file);
+             return xpath.evaluate(toEvaluate, fis);
+         } finally {
+             ioUtils.close(fis);
+         }
+
+         return "";
+     }
+
+    /**
+     * Evaluate an xpath for a string.
+     *
+     * @param xpath is the xpath to evaluate.
+     * @param toEvaluate is the string to evaluate against the xpath.
+     * @param str is the string to use for evalution.
+     *
+     * @return the evaluated XPath.
+     *
+     * @throws IllegalArgumentException if xpath, toEvaluate or str are null (or blank if toEvaluate/str).
+     */
+     Object evaluate(XPath xpath, String toEvaluate, String str) {
+         objectUtils.ensure(xpath, "XPath is null!");
+         stringUtils.ensure(toEvaluate, "The XPath string to evaluate is blank!");
+         stringUtils.ensure(str, "The string to use is blank!");
+
+         return xpath.evaluate(toEvaluate, new ByteArrayInputStream(str.getBytes()));
      }
 
     return this;

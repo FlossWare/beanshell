@@ -1,0 +1,18 @@
+<persons>
+    <person>
+        <first>
+            Joe
+        </first>
+        <last>
+            Blow
+        </last>
+    </person>
+    <person>
+        <first>
+            John
+        </first>
+        <last>
+            Does
+        </last>
+    </person>
+</persons>
