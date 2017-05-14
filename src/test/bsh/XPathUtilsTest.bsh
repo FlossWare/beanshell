@@ -3,6 +3,7 @@
  */
 XPathUtilsTest() {
     import junit.framework.Assert;
+    import javax.xml.xpath.XPath;
 
     xpathUtils = XPathUtils();
 
@@ -11,6 +12,14 @@ XPathUtilsTest() {
      */
     void test_createXPath() {
         Assert.assertNotNull("Should have create an XPath blank", xpathUtils.createXPath());
+    }
+
+    void test_evaluate_XPath_String_InputStream() {
+        XPath xpath = xpathUtils.createXPath();
+
+        //print(xpathUtils.evaluate(xpath, "/persons/person[0]/first", Object.class.getResourceAsStream("/foo.xml")));
+        print(Object.class.getResourceAsStream("/foo.xml"));
+        print(Object.class.getResourceAsStream("foo.xml"));
     }
 
     return this;

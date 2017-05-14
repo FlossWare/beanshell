@@ -41,9 +41,9 @@
         <pathelement location="${junit.jar}"/>
         -->
         <fileset dir="${flossware.beanshell.lib.HOME}" includes="*.jar"/>
-        <pathelement location="src/main/bsh"/>
-        <pathelement location="src/test/bsh"/>
-        <pathelement location="src/test/resources"/>
+        <pathelement location="${flossware.beanshell.HOME}/src/main/bsh"/>
+        <pathelement location="${flossware.beanshell.HOME}/src/test/bsh"/>
+        <pathelement location="${flossware.beanshell.HOME}/src/test/resources"/>
     </path>
 
     <!-- =========================================================================================== -->
