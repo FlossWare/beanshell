@@ -33,7 +33,7 @@ XPathUtils() {
      *
      * @throws IllegalArgumentException if xpath, toEvaluate or inputStream are null (or blank if toEvaluate).
      */
-     Object evaluate(XPath xpath, String toEvaluate, InputStream inputStream) {
+     String evaluate(XPath xpath, String toEvaluate, InputStream inputStream) {
          objectUtils.ensure(xpath, "XPath is null!");
          stringUtils.ensure(toEvaluate, "The XPath string to evaluate is blank!");
          objectUtils.ensure(inputStream, "The input stream is null!");
