@@ -42,6 +42,19 @@ XPathUtils() {
      }
 
     /**
+     * Evaluate an xpath for an input stream.
+     *
+     * @param toEvaluate is the string to evaluate against the xpath.
+     * @param inputStream is the input stream to use for evalution.
+     *
+     * @return the evaluated XPath.
+     *
+     * @throws IllegalArgumentException if xpath, or toEvaluate are null (or blank if toEvaluate).
+     */
+     String evaluate(String toEvaluate, InputStream inputStream) {
+         return evaluate(createXPath()
+
+    /**
      * Evaluate an xpath for a file.
      *
      * @param xpath is the xpath to evaluate.
