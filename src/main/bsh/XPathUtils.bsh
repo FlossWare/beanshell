@@ -52,7 +52,8 @@ XPathUtils() {
      * @throws IllegalArgumentException if xpath, or toEvaluate are null (or blank if toEvaluate).
      */
      String evaluate(String toEvaluate, InputStream inputStream) {
-         return evaluate(createXPath()
+         return evaluate(createXPath());
+     }
 
     /**
      * Evaluate an xpath for a file.
